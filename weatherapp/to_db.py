@@ -1,5 +1,7 @@
+import time
+
 from .consumer import get_weather_at_location, get_weather_history_at_location
-from .db import get_weather_collection
+from .db import weather, weather_insert
 
 if __name__ == "__main__":
     """
@@ -7,9 +9,24 @@ if __name__ == "__main__":
     """
     toponym = 'New York, US'
     weather_data_list = get_weather_history_at_location(toponym)
+    print('Pulling new:', len(weather_data_list))
 
-    weather = get_weather_collection()
-    weather.find_one()
-    weather.insert_many([i.to_dict() for i in weather_data_list])
-    total_documents = weather.count_documents({})
-    print("A total of {} documents inserted".format(total_documents))
+    inserted = weather_insert(weather_data_list)
+    if inserted:
+        print('Inserted documents: ', len(inserted))
+
+    try:
+        while True:
+            weather_data = get_weather_at_location(toponym)
+            print(str(weather_data).replace(
+                '<pyowm.weatherapi25.weather.', '').replace('>', ''))
+            weather_insert(weather_data)
+            time.sleep(5)
+    except KeyboardInterrupt:
+        print('Operation canceled.')
+    except SystemExit:
+        print('System shutting down..')
+    finally:
+        w_collection = weather()
+        print("A total of {} documents in DB.".format(
+            w_collection.count_documents({})))

@@ -10,7 +10,7 @@ from .config import OPEN_WEATHER_API_KEY
 owm = OWM(OPEN_WEATHER_API_KEY)
 
 
-def get_weather_at_location(toponym: str):
+def get_weather_at_location(toponym: str) -> Weather:
     """
     Weather information at a location. New info every 10 min.
     """
