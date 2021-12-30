@@ -1,6 +1,7 @@
 from typing import List
 
 from pyowm.owm import OWM
+from pyowm.weatherapi25.location import Location
 from pyowm.weatherapi25.observation import Observation
 from pyowm.weatherapi25.one_call import OneCall
 from pyowm.weatherapi25.weather import Weather
@@ -8,6 +9,18 @@ from pyowm.weatherapi25.weather import Weather
 from .config import OPEN_WEATHER_API_KEY
 
 owm = OWM(OPEN_WEATHER_API_KEY)
+
+
+def get_geocode(toponym: str) -> Location:
+    """
+    Location information.
+    """
+    gm = owm.geocoding_manager()
+
+    locations = gm.geocode(toponym)
+    for location in locations:
+        if location is not None:
+            return location
 
 
 def get_weather_at_location(toponym: str) -> Weather:
