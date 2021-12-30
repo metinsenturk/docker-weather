@@ -13,19 +13,25 @@ CONNECTION_STRING = "mongodb://%s:%s@%s:%s" % (
 
 
 def get_database() -> Database:
-
+    """
+    Get weather database.
+    """
     client = MongoClient(CONNECTION_STRING)
     return client['WeatherDB']
 
 
 def weather() -> Collection:
-
+    """
+    Get weather collection.
+    """
     db = get_database()
     return db['WeatherCollection']
 
 
 def weather_get_all() -> List[Any]:
-
+    """
+    Get all weather data.
+    """
     return list(weather().find())
 
 
