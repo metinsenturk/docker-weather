@@ -1,13 +1,25 @@
 version: "3"
 services:
+  # first service, the database
   db:
     image: mongo:latest
     container_name: mongodb
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=DockerWeather1
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
     volumes:
       - ./database:/data/db
     ports:
-      - 27017:27017
+      - ${MONGODB_PORT}:27017
     restart: unless-stopped
+
+  # app to insert to mongodb
+  to_db:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather-pull
+    env_file:
+      - .env
+    depends_on:
+      - "db"
