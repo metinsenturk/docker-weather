@@ -21,9 +21,8 @@ if __name__ == "__main__":
         print('Inserted documents: ', len(inserted))
 
     try:
-        print("""Starting to pull in 10 min intervals. Please change 
-        the environment variable if you want it more often.
-        """)
+        print("Starting to pull in 10 min intervals. Please change the environment \n"
+              "variable `APP_PULL_INTERVAL` if you want it more often.")
         while True:
             weather_data = get_weather_at_location(toponym)
             print(str(weather_data).replace(
